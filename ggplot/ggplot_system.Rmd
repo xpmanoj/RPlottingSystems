@@ -1,0 +1,95 @@
+# Plotting System: ggplot 
+ggplot --> Grammar of Graphics. Current version is ggplot2
+
+## 1. qplot
+```{r setoptions, echo=TRUE}
+# Simple qplot
+library(ggplot2)
+str(mpg)
+qplot(displ, hwy, data = mpg)
+
+# Add color to drv
+qplot(displ, hwy, data = mpg, color = drv)
+
+# Add geom
+qplot(displ, hwy, data = mpg, geom = c("point", "smooth"))
+
+# Histogram
+qplot(hwy, data = mpg, fill = drv)
+
+# Facets
+qplot(displ, hwy, data  = mpg, facets = . ~ drv)
+qplot(hwy, data  = mpg, facets = drv ~ ., binwidth = 2)
+
+# Apply density
+qplot(hwy, data  = mpg, geom ="density")
+# Differentiate drv by color
+qplot(hwy, data  = mpg, geom ="density", color = drv)
+
+# Differentiate drv by shape
+qplot(displ,hwy, data  = mpg, shape = drv)
+# Differentiate drv by color
+qplot(displ,hwy, data  = mpg, color = drv)
+# Point and Smooth 
+qplot(displ,hwy, data  = mpg, color = drv, geom = c("point", "smooth"))
+# Smooth by linear regression
+qplot(displ,hwy, data  = mpg, color = drv, geom = c("point", "smooth"), method = "lm")
+# Smooth by linear regression and appply facets
+qplot(displ, hwy, data  = mpg, color = drv, geom = c("point", "smooth"), method = "lm", facets = .~drv)
+```
+## 1. ggplot
+ggplot builds up the plot in layers
+– Plot the data	
+– Overla a summary	
+– Metadata and annotation	
+```{r}
+head(mpg)
+g <- ggplot(mpg, aes(displ, hwy))
+summary(g)
+
+# Plot after adding geom_points
+p <- g + geom_point()
+print(p)
+
+# OR
+g + geom_point()
+
+# Add more layers: Smooth
+g + geom_point() + geom_smooth()
+
+# Smooth using linear regression
+g + geom_point() + geom_smooth(method= "lm")
+
+# Add more layers: Facet
+g + geom_point() + facet_grid(.~ drv) + geom_smooth(method= "lm")
+
+# Add themes (eg. theme_gray(), theme_bw())
+g + geom_point() + facet_grid(.~ drv) + geom_smooth(method= "lm") + theme_bw()
+
+# Modifying aesthetics, constant value for color
+g + geom_point(color = "steelblue", size = 4, alpha =  1/2)
+
+# Modifying aesthetics, data variable value for color
+g + geom_point(aes(color = drv) , size = 4, alpha =  1/2)
+
+# Modifying labels
+g + geom_point(aes(color = drv)) + labs(title = "Automobile Performance") + labs(x = "Engine displacement", y = "High way mileage")
+
+#Customizing the smooth
+g + geom_point(aes(color = drv) , size = 4, alpha =  1/2) + geom_smooth(size = 4, linetype = 3, method = "lm", se = FALSE)
+
+#Changing the Theme with font
+g + geom_point(aes(color = drv)) + theme_bw(base_family = "Times")
+
+```
+``` {r}
+# Generate .md file and figure folder
+#library(knitr)
+#library(markdown)
+#knit("ggplot_system.Rmd")
+```
+
+
+
+
+
